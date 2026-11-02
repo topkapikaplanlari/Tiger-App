@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="tr" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiger - Eğitim ve Test Platformu</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#0082c8',
+                            purple: '#662d91',
+                            dark: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .bg-gradient-brand {
+            background: linear-gradient(135deg, #0082c8 0%, #662d91 100%);
+        }
+        .text-gradient-brand {
+            background: linear-gradient(135deg, #0082c8 0%, #662d91 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-800/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Logo & Name -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-700 shadow-inner p-1">
+                        <!-- Custom Tiger SVG matching user provided image style -->
+                        <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow">
+                            <defs>
+                                <linearGradient id="tigerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#0082c8" />
+                                    <stop offset="100%" stop-color="#662d91" />
+                                </linearGradient>
+                            </defs>
+                            <path fill="url(#tigerGrad)" d="M85 45c0-15-12-25-25-25-8 0-15 4-20 10-2-8-8-12-16-12-12 0-18 12-18 20 0 18 15 35 34 35 15 0 28-8 35-18 6 1 10-4 10-10zM50 70c-12 0-22-10-24-22 6 2 12 0 16-4 4 4 10 6 16 2 2 8 6 14 12 16-5 5-13 8-20 8z" />
+                            <path fill="url(#tigerGrad)" d="M72 38c-3-2-8-2-12 1 2 3 5 5 9 5 2 0 3-3 3-6z" />
+                            <!-- ROARING TIGER SHAPE matching logo -->
+                            <path fill="url(#tigerGrad)" d="M82,42 C78,30 65,22 50,22 C42,22 35,26 30,32 C26,26 18,24 10,32 C2,40 5,55 18,65 C32,76 52,78 68,70 C75,66 82,58 85,48 C86,44 84,42 82,42 Z M48,64 C38,64 30,56 28,45 C35,47 40,44 44,38 C48,44 55,45 60,42 C62,50 68,54 74,56 C68,61 58,64 48,64 Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-gradient-brand">TIGER</span>
+                        <span class="text-xs font-semibold text-slate-400 block -mt-1 tracking-widest uppercase" id="navSubtitle">Eğitim Platformu</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2">
+                    <button onclick="navigateTo('home')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold transition text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-slate-700" id="navHome">
+                        <i class="fa-solid fa-house mr-2"></i><span data-i18n="home">Ana Sayfa</span>
+                    </button>
+                    <button onclick="navigateTo('schedule')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" id="navSchedule">
+                        <i class="fa-solid fa-calendar-days mr-2"></i><span data-i18n="schedule">Ders Programı</span>
+                    </button>
+                    <button onclick="navigateTo('quiz') font-semibold" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" id="navQuiz">
+                        <i class="fa-solid fa-trophy mr-2"></i><span data-i18n="quizGame">Bilgi Yarışması</span>
+                    </button>
+                    <button onclick="navigateTo('ai')" class="nav-btn px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition" id="navAI">
+                        <i class="fa-solid fa-robot mr-2 text-purple-500"></i><span data-i18n="aiTutor">Yapay Zeka</span>
+                    </button>
+                </nav>
+
+                <!-- Actions / Settings -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="openSettingsModal()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-600 transition flex items-center space-x-2" title="Ayarlar">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                        <span class="text-xs font-bold hidden sm:inline" data-i18n="settings">Ayarlar</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-house mr-2"></i><span data-i18n="home">Ana Sayfa</span>
+            </button>
+            <button onclick="navigateTo('schedule'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-calendar-days mr-2"></i><span data-i18n="schedule">Ders Programı</span>
+            </button>
+            <button onclick="navigateTo('quiz'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-trophy mr-2"></i><span data-i18n="quizGame">Bilgi Yarışması</span>
+            </button>
+            <button onclick="navigateTo('ai'); toggleMobileMenu()" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700">
+                <i class="fa-solid fa-robot mr-2 text-purple-500"></i><span data-i18n="aiTutor">Yapay Zeka Koçu</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- SECTION: HOME / GRADE & SUBJECT SELECTION -->
+        <section id="sec-home" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-brand p-8 sm:p-12 text-white shadow-xl">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-4 inline-block" data-i18n="welcomeBadge">
+                        🎓 5, 6, 7. Sınıflar İçin Eğitim Portalı
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4 leading-tight" data-i18n="heroTitle">
+                        Başarıya Tiger İle Ulaş!
+                    </h1>
+                    <p class="text-base sm:text-lg text-white/90 mb-6" data-i18n="heroDesc">
+                        Sınıfını seç, testleri çöz, anında geri bildirim al ve bilgi yarışmasında şampiyon ol. Yapay zeka öğretmeniniz her an yanınızda!
+                    </p>
+                </div>
+                <!-- Background Graphic -->
+                <div class="absolute -right-10 -bottom-10 w-80 h-80 opacity-20 pointer-events-none">
+                    <i class="fa-solid fa-shield-cat text-[280px]"></i>
+                </div>
+            </div>
+
+            <!-- Grade Selection -->
+            <div>
+                <h2 class="text-xl sm:text-2xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-indigo-500"></i>
+                    <span data-i18n="selectGrade">Sınıfınızı Seçin</span>
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <button onclick="selectGrade(5)" id="btn-grade-5" class="grade-card p-6 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all text-left shadow-sm group">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl font-black text-indigo-600 dark:text-indigo-400">5. SINIF</span>
+                            <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-300 group-hover:bg-indigo-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-child text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="grade5Desc">Matematik, Fen, Din ve Sosyal Bilgiler temel testleri</p>
+                    </button>
+
+                    <button onclick="selectGrade(6)" id="btn-grade-6" class="grade-card p-6 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all text-left shadow-sm group">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl font-black text-blue-600 dark:text-blue-400">6. SINIF</span>
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-slate-700 flex items-center justify-center text-blue-600 dark:text-blue-300 group-hover:bg-blue-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-user-graduate text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="grade6Desc">Ortaokul seviyesini güçlendiren zengin soru havuzu</p>
+                    </button>
+
+                    <button onclick="selectGrade(7)" id="btn-grade-7" class="grade-card p-6 rounded-2xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all text-left shadow-sm group">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-2xl font-black text-purple-600 dark:text-purple-400">7. SINIF</span>
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-slate-700 flex items-center justify-center text-purple-600 dark:text-purple-300 group-hover:bg-purple-600 group-hover:text-white transition">
+                                <i class="fa-solid fa-book-open-reader text-lg"></i>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="grade7Desc">LGS hazırlığı öncesi kritik kavram geliştirme testleri</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Subject & Test Selection -->
+            <div id="subjectSection" class="space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <h2 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-book text-purple-500"></i>
+                        <span id="selectedGradeTitle">5. Sınıf Dersleri</span>
+                    </h2>
+                    <span class="text-sm text-slate-500 dark:text-slate-400" data-i18n="selectTestInfo">Lütfen çözmek istediğiniz testi seçin:</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="subjectCardsContainer">
+                    <!-- Cards generated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TEST ACTIVE / QUIZ RUNNER -->
+        <section id="sec-test" class="hidden space-y-6 max-w-4xl mx-auto">
+            <!-- Test Header Info Bar -->
+            <div class="bg-white dark:bg-slate-800 p-4 sm:p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <span id="testSubjectBadge" class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-lg text-xs font-bold uppercase tracking-wider">FEN BİLİMLERİ</span>
+                    <h2 id="testTitleText" class="text-xl font-bold mt-1">Test 1: Hücre ve Bölünmeler</h2>
+                </div>
+
+                <!-- Timer & Jokers -->
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <!-- Timer -->
+                    <div class="flex items-center space-x-2 bg-slate-100 dark:bg-slate-700 px-3 py-1.5 rounded-xl">
+                        <i class="fa-regular fa-clock text-amber-500 text-lg"></i>
+                        <span id="timerDisplay" class="font-mono text-lg font-bold">15:00</span>
+                    </div>
+
+                    <!-- 50/50 Joker (Beyaz) -->
+                    <button id="jokerFiftyBtn" onclick="useJokerFifty()" class="px-3 py-1.5 bg-white dark:bg-slate-600 border border-slate-300 dark:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-500 rounded-xl text-xs font-bold flex items-center space-x-1.5 shadow-sm transition" title="2 Yanlış Şıkkı Ele">
+                        <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                        <span>%50 Joker</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-10 shadow-lg border border-slate-200 dark:border-slate-700 relative">
+                <!-- Progress bar -->
+                <div class="w-full bg-slate-100 dark:bg-slate-700 h-2.5 rounded-full mb-6 overflow-hidden">
+                    <div id="quizProgressBar" class="bg-gradient-brand h-full w-10 transition-all duration-300"></div>
+                </div>
+
+                <div class="flex items-center justify-between mb-4">
+                    <span id="questionNumText" class="text-sm font-bold text-slate-400 dark:text-slate-500">Soru 1 / 10</span>
+                    <span id="difficultyTag" class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Kolay</span>
+                </div>
+
+                <!-- Question Text -->
+                <h3 id="questionText" class="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-8 leading-relaxed">
+                    Soru yükleniyor...
+                </h3>
+
+                <!-- Options Grid -->
+                <div id="optionsContainer" class="space-y-3">
+                    <!-- Options injected by JS -->
+                </div>
+
+                <!-- Next / Finish Controls -->
+                <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                    <button onclick="confirmExitTest()" class="text-xs sm:text-sm font-semibold text-rose-500 hover:underline">
+                        <i class="fa-solid fa-arrow-left mr-1"></i> <span data-i18n="exitTest">Testten Çık</span>
+                    </button>
+
+                    <button id="nextQuestionBtn" onclick="nextQuestion()" disabled class="px-6 py-2.5 bg-gradient-brand text-white font-bold rounded-xl shadow-md hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition">
+                        <span data-i18n="nextQuestion">Sonraki Soru</span> <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: TEST RESULT & ANALYSIS -->
+        <section id="sec-result" class="hidden space-y-6 max-w-3xl mx-auto">
+            <div class="bg-white dark:bg-slate-800 p-8 sm:p-10 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-700 text-center space-y-6">
+                <div id="resultIcon" class="w-20 h-20 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-500 text-4xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-1" data-i18n="testCompleted">Test Tamamlandı!</h2>
+                    <p id="resultSubtitle" class="text-slate-500 dark:text-slate-400 text-sm">5. Sınıf Fen Bilimleri - Test 1</p>
+                </div>
+
+                <!-- Score Board -->
+                <div class="grid grid-cols-3 gap-3 sm:gap-4 bg-slate-50 dark:bg-slate-700/50 p-4 sm:p-6 rounded-2xl">
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-black text-emerald-500" id="resCorrect">0</span>
+                        <span class="text-xs font-semibold text-slate-400" data-i18n="correct">Doğru</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-black text-rose-500" id="resWrong">0</span>
+                        <span class="text-xs font-semibold text-slate-400" data-i18n="wrong">Yanlış</span>
+                    </div>
+                    <div>
+                        <span class="block text-2xl sm:text-3xl font-black text-indigo-500" id="resScore">%0</span>
+                        <span class="text-xs font-semibold text-slate-400" data-i18n="score">Başarı</span>
+                    </div>
+                </div>
+
+                <!-- Dynamic Feedback / Advice Box -->
+                <div class="p-5 rounded-2xl bg-indigo-50 dark:bg-slate-700/80 border border-indigo-100 dark:border-slate-600 text-left space-y-2">
+                    <div class="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-bold">
+                        <i class="fa-solid fa-comment-dots text-lg"></i>
+                        <span data-i18n="performanceAnalysis">Performans Analizi & Tavsiye</span>
+                    </div>
+                    <p id="resultFeedbackText" class="text-sm text-slate-700 dark:text-slate-200 leading-relaxed">
+                        Analiz hazırlanıyor...
+                    </p>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                    <button onclick="navigateTo('home')" class="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl font-bold hover:bg-slate-200 transition">
+                        <i class="fa-solid fa-house mr-2"></i> <span data-i18n="home">Ana Sayfaya Dön</span>
+                    </button>
+                    <button onclick="askAIAboutTest()" class="px-6 py-3 bg-gradient-brand text-white rounded-xl font-bold shadow-md hover:opacity-90 transition">
+                        <i class="fa-solid fa-robot mr-2"></i> <span data-i18n="askAITeacher">Yapay Zekaya Danış</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: WEEKLY SCHEDULE (Ders Programı) -->
+        <section id="sec-schedule" class="hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-days text-indigo-500"></i>
+                        <span data-i18n="scheduleTitle">Haftalık Çalışma Programı</span>
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="scheduleDesc">Derslerinize düzenli çalışmak için önerilen haftalık plan:</p>
+                </div>
+                <div class="inline-flex rounded-xl bg-slate-100 dark:bg-slate-700 p-1">
+                    <button onclick="filterScheduleGrade(5)" id="schBtn5" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 shadow-sm">5. Sınıf</button>
+                    <button onclick="filterScheduleGrade(6)" id="schBtn6" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500">6. Sınıf</button>
+                    <button onclick="filterScheduleGrade(7)" id="schBtn7" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500">7. Sınıf</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4" id="scheduleDaysContainer">
+                <!-- Days injected by JS -->
+            </div>
+        </section>
+
+        <!-- SECTION: TRIVIA / BİLGİ YARIŞMASI -->
+        <section id="sec-quiz" class="hidden space-y-6 max-w-3xl mx-auto">
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl shadow-lg border border-slate-200 dark:border-slate-700 text-center space-y-6">
+                <div class="inline-flex p-4 rounded-3xl bg-amber-100 dark:bg-amber-900/40 text-amber-500 mb-2">
+                    <i class="fa-solid fa-bolt text-4xl"></i>
+                </div>
+                <h2 class="text-3xl font-extrabold" data-i18n="triviaTitle">Hızlı Bilgi Yarışması</h2>
+                <p class="text-slate-500 dark:text-slate-400 max-w-md mx-auto text-sm" data-i18n="triviaDesc">
+                    Karışık derslerden sorularla sürece karşı yarışın! Bakalım rekoru kırabilecek misin?
+                </p>
+
+                <div id="triviaStartArea" class="pt-4">
+                    <button onclick="startTriviaGame()" class="px-8 py-4 bg-gradient-brand text-white text-lg font-extrabold rounded-2xl shadow-lg hover:scale-105 transition transform">
+                        <i class="fa-solid fa-play mr-2"></i> <span data-i18n="startTrivia">Yarışmayı Başlat</span>
+                    </button>
+                </div>
+
+                <div id="triviaGameArea" class="hidden text-left space-y-6 pt-4 border-t border-slate-200 dark:border-slate-700">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-bold text-indigo-500" id="triviaScoreText">Puan: 0</span>
+                        <span class="text-sm font-bold text-rose-500" id="triviaTimerText">Kalan Süre: 20s</span>
+                    </div>
+                    <h3 id="triviaQuestionText" class="text-lg font-bold">Yarışma sorusu burada belirecek...</h3>
+                    <div id="triviaOptionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Options injected JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: AI TUTOR (YAPAY ZEKA) -->
+        <section id="sec-ai" class="hidden space-y-6 max-w-4xl mx-auto">
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col h-[600px]">
+                <!-- Chat Header -->
+                <div class="p-4 sm:p-6 bg-slate-50 dark:bg-slate-700/50 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-gradient-brand flex items-center justify-center text-white">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base">Tiger AI Öğretmen</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Gemini 3.1 Flash destekli kişisel ders koçun</p>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300">
+                        <span class="w-2 h-2 mr-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Çevrimiçi
+                    </span>
+                </div>
+
+                <!-- Chat Messages Body -->
+                <div id="aiChatBody" class="flex-grow p-4 sm:p-6 overflow-y-auto space-y-4">
+                    <!-- Initial AI Welcome -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-brand flex items-center justify-center text-white text-xs shrink-0">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div class="bg-slate-100 dark:bg-slate-700 rounded-2xl p-4 text-sm max-w-md">
+                            Merhaba! Ben Tiger Yapay Zeka Öğretmeniniz. Fen, Matematik, Din Kültürü ve Sosyal Bilgiler konularında takıldığınız her şeyi bana sorabilirsiniz! 🚀
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input Area -->
+                <div class="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700">
+                    <form onsubmit="handleAISubmit(event)" class="flex space-x-2">
+                        <input type="text" id="aiInput" placeholder="Anlamadığın bir konuyu veya soruyu sor..." class="flex-grow px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <button type="submit" id="aiSendBtn" class="px-5 py-3 bg-gradient-brand text-white font-bold rounded-xl hover:opacity-90 transition">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+            <p>© 2026 Tiger Eğitim Platformu. Tüm hakları saklıdır. 5, 6 ve 7. Sınıflar İçin Özenle Hazırlandı.</p>
+        </div>
+    </footer>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-6 border border-slate-200 dark:border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-4">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-indigo-500"></i>
+                    <span data-i18n="settings">Ayarlar</span>
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Theme Mode Setting -->
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="themeLabel">Görünüm Modu</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setTheme('light')" id="themeLightBtn" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition">
+                        <i class="fa-solid fa-sun text-amber-500"></i>
+                        <span data-i18n="lightMode">Aydınlık</span>
+                    </button>
+                    <button onclick="setTheme('dark')" id="themeDarkBtn" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition">
+                        <i class="fa-solid fa-moon text-indigo-400"></i>
+                        <span data-i18n="darkMode">Koyu</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Language Setting -->
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="langLabel">Dil / Language</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setLanguage('tr')" id="langTrBtn" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition">
+                        <span>🇹🇷 Türkçe</span>
+                    </button>
+                    <button onclick="setLanguage('en')" id="langEnBtn" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition">
+                        <span>🇬🇧 English</span>
+                    </button>
+                </div>
+            </div>
+
+            <button onclick="closeSettingsModal()" class="w-full py-3 bg-gradient-brand text-white font-bold rounded-xl shadow-md">
+                <span data-i18n="saveAndClose">Kaydet ve Kapat</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ==================== STATE MANAGEMENT ==================== */
+        let currentState = {
+            currentGrade: 5,
+            currentLanguage: 'tr',
+            theme: 'light',
+            currentTest: null,
+            currentQuestionIdx: 0,
+            userAnswers: [],
+            timerInterval: null,
+            timeLeft: 900, // 15 mins in sec
+            jokerUsed: false,
+            triviaScore: 0,
+            triviaTimer: 20,
+            triviaInterval: null,
+            triviaIdx: 0
+        };
+
+        /* ==================== DICTIONARY / I18N ==================== */
+        const i18n = {
+            tr: {
+                home: "Ana Sayfa",
+                schedule: "Ders Programı",
+                quizGame: "Bilgi Yarışması",
+                aiTutor: "Yapay Zeka Koçu",
+                settings: "Ayarlar",
+                welcomeBadge: "🎓 5, 6, 7. Sınıflar İçin Eğitim Portalı",
+                heroTitle: "Başarıya Tiger İle Ulaş!",
+                heroDesc: "Sınıfını seç, testleri çöz, anında geri bildirim al ve bilgi yarışmasında şampiyon ol. Yapay zeka öğretmeniniz her an yanınızda!",
+                selectGrade: "Sınıfınızı Seçin",
+                grade5Desc: "Matematik, Fen, Din ve Sosyal Bilgiler temel testleri",
+                grade6Desc: "Ortaokul seviyesini güçlendiren zengin soru havuzu",
+                grade7Desc: "LGS hazırlığı öncesi kritik kavram geliştirme testleri",
+                selectTestInfo: "Lütfen çözmek istediğiniz testi seçin:",
+                exitTest: "Testten Çık",
+                nextQuestion: "Sonraki Soru",
+                testCompleted: "Test Tamamlandı!",
+                correct: "Doğru",
+                wrong: "Yanlış",
+                score: "Başarı",
+                performanceAnalysis: "Performans Analizi & Tavsiye",
+                askAITeacher: "Yapay Zekaya Danış",
+                scheduleTitle: "Haftalık Çalışma Programı",
+                scheduleDesc: "Derslerinize düzenli çalışmak için önerilen haftalık plan:",
+                triviaTitle: "Hızlı Bilgi Yarışması",
+                triviaDesc: "Karışık derslerden sorularla süreye karşı yarışın! Bakalım rekoru kırabilecek misin?",
+                startTrivia: "Yarışmayı Başlat",
+                themeLabel: "Görünüm Modu",
+                lightMode: "Aydınlık",
+                darkMode: "Koyu",
+                langLabel: "Dil / Language",
+                saveAndClose: "Kaydet ve Kapat"
+            },
+            en: {
+                home: "Home",
+                schedule: "Study Plan",
+                quizGame: "Trivia Game",
+                aiTutor: "AI Tutor",
+                settings: "Settings",
+                welcomeBadge: "🎓 Educational Portal for Grades 5, 6, 7",
+                heroTitle: "Achieve Success with Tiger!",
+                heroDesc: "Select your grade, solve tests, get instant feedback, and win the trivia game. AI Tutor is always with you!",
+                selectGrade: "Select Your Grade",
+                grade5Desc: "Core tests for Math, Science, Religion, and Social Studies",
+                grade6Desc: "Rich question pool strengthening middle school knowledge",
+                grade7Desc: "Critical concept development tests ahead of LGS prep",
+                selectTestInfo: "Please select the test you wish to take:",
+                exitTest: "Exit Test",
+                nextQuestion: "Next Question",
+                testCompleted: "Test Completed!",
+                correct: "Correct",
+                wrong: "Wrong",
+                score: "Score",
+                performanceAnalysis: "Performance Analysis & Advice",
+                askAITeacher: "Consult AI Tutor",
+                scheduleTitle: "Weekly Study Schedule",
+                scheduleDesc: "Recommended weekly study schedule for your courses:",
+                triviaTitle: "Speed Trivia Quiz",
+                triviaDesc: "Compete against time with mixed subject questions! Can you break the record?",
+                startTrivia: "Start Quiz",
+                themeLabel: "Appearance Mode",
+                lightMode: "Light",
+                darkMode: "Dark",
+                langLabel: "Language / Dil",
+                saveAndClose: "Save & Close"
+            }
+        };
+
+        /* ==================== MOCK DATABASE (TESTS & QUESTIONS) ==================== */
+        const subjectsData = [
+            { id: 'fen', name: 'Fen Bilimleri', icon: 'fa-flask', color: 'emerald' },
+            { id: 'matematik', name: 'Matematik', icon: 'fa-calculator', color: 'indigo' },
+            { id: 'din', name: 'Din Kültürü', icon: 'fa-moon', color: 'amber' },
+            { id: 'sosyal', name: 'Sosyal Bilgiler', icon: 'fa-earth-americas', color: 'blue' }
+        ];
+
+        // Generator function to dynamically produce questions for all 5, 6, 7 grades
+        function getTestData(grade, subjectId, testNum) {
+            const subjectMap = {
+                fen: {
+                    5: [
+                        { q: "Güneş, Dünya ve Ay modelinde hangisi en büyüktür?", options: ["Ay", "Güneş", "Dünya", "Mars"], answer: 1 },
+                        { q: "Canlıları sınıflandırırken omurgalı hayvanlara hangisi örnektir?", options: ["Sinek", "Kedi", "Solucan", "Ahtapot"], answer: 1 },
+                        { q: "Maddenin ısı alarak sıvı halden gaz haline geçmesine ne denir?", options: ["Erime", "Donma", "Buharlaşma", "Yoğuşma"], answer: 2 },
+                        { q: "Kuvvetin birimi aşağıdakilerden hangisidir?", options: ["Gram", "Newton", "Metre", "Litre"], answer: 1 },
+                        { q: "Sürtünme kuvvetini azaltmak için hangisi yapılır?", options: ["Tekerleklere zincir takmak", "Rulman yağlamak", "Pürüzlü yüzey yapmak", "Kış lastiği takmak"], answer: 1 },
+                        { q: "Işık nasıl yayılır?", options: ["Eğri çizgilerle", "Doğrusal yolla", "Dairesel", "Dalgasız"], answer: 1 },
+                        { q: "Opak maddeye örnek hangisidir?", options: ["Cam", "Tahta", "Şeffaf poşet", "Su"], answer: 1 },
+                        { q: "Biyoçeşitliliği tehdit eden faktör hangisidir?", options: ["Milli parklar", "Kaçak avlanma", "Ağaçlandırma", "Geri dönüşüm"], answer: 1 },
+                        { q: "Hangisi yenilenebilir enerji kaynağıdır?", options: ["Kömür", "Güneş", "Petrol", "Doğalgaz"], answer: 1 },
+                        { q: "Devrede lambanın ışık vermesi için hangisi şarttır?", options: ["Açık anahtar", "Kapalı devre", "Pil olmaması", "Kırık kablo"], answer: 1 }
+                    ],
+                    6: [
+                        { q: "Güneş sistemindeki en büyük gezegen hangisidir?", options: ["Mars", "Jüpiter", "Dünya", "Venüs"], answer: 1 },
+                        { q: "Destek ve hareket sisteminde kemikleri birbirine bağlayan yapı nedir?", options: ["Kas", "Eklem", "Kıkırdak", "Damar"], answer: 1 },
+                        { q: "Sindirim nerede başlar?", options: ["Mide", "Ağız", "Yutak", "İnce Bağırsak"], answer: 1 },
+                        { q: "Kanın vücuda pompalanmasını sağlayan organ hangisidir?", options: ["Akciğer", "Kalp", "Böbrek", "Karaciğer"], answer: 1 },
+                        { q: "Yoğunluk formülü nedir?", options: ["Kütle / Hacim", "Hacim / Kütle", "Kuvvet x Yol", "Hız x Zaman"], answer: 0 },
+                        { q: "Ses en hızlı hangi ortamda yayılır?", options: ["Gaz", "Sıvı", "Katı", "Boşluk"], answer: 2 },
+                        { q: "Isı yalıtımı için hangisi kullanılır?", options: ["Bakır", "Strafor köpük", "Demir", "Alüminyum"], answer: 1 },
+                        { q: "Boşaltım sisteminin ana organı hangisidir?", options: ["Böbrek", "Mide", "Kalp", "Akciğer"], answer: 0 },
+                        { q: "Yenilenemez enerji kaynağı hangisidir?", options: ["Rüzgar", "Güneş", "Kömür", "Jeotermal"], answer: 2 },
+                        { q: "Sabit makaralarda kuvvetten kazanç var mıdır?", options: ["Evet 2 kat", "Hayır yok", "Evet 3 kat", "Değişir"], answer: 1 }
+                    ],
+                    7: [
+                        { q: "Hücrede enerji üretimi hangi organelde gerçekleşir?", options: ["Ribozom", "Mitokondri", "Kloroplast", "Koful"], answer: 1 },
+                        { q: "Mayoz bölünme sonucunda kaç yeni hücre oluşur?", options: ["2", "4", "6", "8"], answer: 1 },
+                        { q: "Kütle ile ağırlık arasındaki fark nedir?", options: ["Ağırlık sabittir", "Kütle konuma göre değişmez", "İkisi aynıdır", "Kütle dinamometre ile ölçülür"], answer: 1 },
+                        { q: "Aynalarda görüntünün ters olduğu ayna türü hangisidir?", options: ["Düzlem Ayna", "Çukur Ayna", "Tümsek Ayna", "Prizma"], answer: 1 },
+                        { q: "Atomun çekirdeğinde bulunan pozitif yüklü parçacık hangisidir?", options: ["Elektron", "Proton", "Nötron", "Foton"], answer: 1 },
+                        { q: "Periyodik tabloda aynı düşey sırada olanlara ne denir?", options: ["Periyot", "Grup", "Blok", "Seri"], answer: 1 },
+                        { q: "Işığın kırılması hangisinde gözlemlenir?", options: ["Sudaki kalemin kırık görünmesi", "Aynada yansıma", "Gölge oluşumu", "Gece oluşumu"], answer: 0 },
+                        { q: "Kinetik enerji neye bağlıdır?", options: ["Kütle ve Yükseklik", "Kütle ve Hız", "Ağırlık ve Hacim", "Sadece Sıcaklık"], answer: 1 },
+                        { q: "Bitki hücresini hayvan hücresinden ayıran yapı nedir?", options: ["Hücre Duvarı", "Hücre Zarı", "Çekirdek", "Sitoplazma"], answer: 0 },
+                        { q: "Mitoz bölünme nerede gerçekleşir?", options: ["Sadece üreme hücrelerinde", "Vücut hücrelerinde", "Tüm bakterilerde", "Sadece kan hücrelerinde"], answer: 1 }
+                    ]
+                },
+                matematik: {
+                    5: [
+                        { q: "453 + 287 işleminin sonucu kaçtır?", options: ["730", "740", "750", "760"], answer: 1 },
+                        { q: "84 / 4 işleminin sonucu kaçtır?", options: ["21", "22", "20", "24"], answer: 0 },
+                        { q: "Bir dikdoğrtgenin kısa kenarı 5 cm, uzun kenarı 10 cm ise çevresi kaç cm'dir?", options: ["15", "30", "50", "25"], answer: 1 },
+                        { q: "3/5 kesrinin yüzde karşılığı nedir?", options: ["%30", "%50", "%60", "%75"], answer: 2 },
+                        { q: "En küçük asal sayı kaçtır?", options: ["0", "1", "2", "3"], answer: 2 },
+                        { q: "0,4 + 0,25 işleminin sonucu nedir?", options: ["0,29", "0,65", "0,45", "0,60"], answer: 1 },
+                        { q: "Açısı 90 derece olan açı çeşidi hangisidir?", options: ["Dar Açı", "Dik Açı", "Geniş Açı", "Doğru Açı"], answer: 1 },
+                        { q: "5 üssü 2 (5²) ifadesinin değeri kaçtır?", options: ["10", "25", "15", "20"], answer: 1 },
+                        { q: "1 saat 45 dakika kaç dakikadır?", options: ["90", "105", "115", "120"], answer: 1 },
+                        { q: "300 TL'nin %20'si kaç TL'dir?", options: ["50", "60", "70", "80"], answer: 1 }
+                    ],
+                    6: [
+                        { q: "-5 ile +8 arasındaki tam sayı farkı mutlak değerce nedir?", options: ["3", "13", "5", "8"], answer: 1 },
+                        { q: "24 ve 36 sayılarının en büyük ortak böleni (EBOB) kaçtır?", options: ["6", "12", "18", "24"], answer: 1 },
+                        { q: "Cebirsel ifade: 3x + 5 ifadesinde x=4 için değer kaçtır?", options: ["12", "17", "20", "15"], answer: 1 },
+                        { q: "Bir açının tümleri 30 derece ise bu açı kaç derecedir?", options: ["60", "150", "90", "120"], answer: 0 },
+                        { q: "Alan formülü 'taban x yükseklik / 2' olan geometrik şekil hangisidir?", options: ["Kare", "Üçgen", "Paralelkenar", "Beşgen"], answer: 1 },
+                        { q: "3/4 ÷ 1/2 işleminin sonucu kaçtır?", options: ["3/8", "6/4 (1.5)", "3/2", "2/3"], answer: 1 },
+                        { q: "Bir veri grubundaki en büyük değer ile en küçük değer arasındaki farka ne denir?", options: ["Aritmetik Ortalama", "Açıklık", "Mod", "Medyan"], answer: 1 },
+                        { q: "Hangi sayı hem 2'ye hem 3'e tam bölünür?", options: ["14", "22", "18", "25"], answer: 2 },
+                        { q: "Ondalık gösterim 2,35 sayısının çözümlenmiş hali hangisidir?", options: ["2 + 0.3 + 0.05", "2 + 0.35", "20 + 3 + 5", "2 + 3/100"], answer: 0 },
+                        { q: "Oran sorusu: 15 kız ve 10 erkeğin olduğu sınıfta erkeklerin kızlara oranı nedir?", options: ["15/10", "2/3", "3/2", "10/25"], answer: 1 }
+                    ],
+                    7: [
+                        { q: "(-4) x (-5) + (-10) işleminin sonucu kaçtır?", options: ["10", "-30", "-10", "30"], answer: 0 },
+                        { q: "2x - 7 = 15 denkleminde x kaçtır?", options: ["11", "8", "9", "12"], answer: 0 },
+                        { q: "Rasyonel sayılarda -3/4 'ün toplama işlemine göre tersi nedir?", options: ["4/3", "3/4", "-4/3", "1/4"], answer: 1 },
+                        { q: "%30 kârla 130 TL'ye satılan bir malın maliyeti kaç TL'dir?", options: ["100", "90", "110", "95"], answer: 0 },
+                        { q: "Bir çemberin yarıçapı 5 cm ise çevresi kaç cm'dir? (pi=3)", options: ["15", "30", "45", "60"], answer: 1 },
+                        { q: "Doğru orantıda x ve y değişkenleri için x=4 iken y=12 ise, x=6 iken y kaçtır?", options: ["18", "16", "20", "24"], answer: 0 },
+                        { q: "İç açıları toplamı 540 derece olan çokgen kaç kenarlıdır?", options: ["Dörtgen", "Beşgen", "Altıgen", "Sekizgen"], answer: 1 },
+                        { q: "Bir yamuğun alt tabanı 8 cm, üst tabanı 4 cm ve yüksekliği 5 cm ise alanı kaçtır?", options: ["30", "60", "20", "40"], answer: 0 },
+                        { q: "(-2)³ üslü niceliğinin değeri kaçtır?", options: ["8", "-8", "6", "-6"], answer: 1 },
+                        { q: "Çizgi grafiği en çok hangi durumda kullanılır?", options: ["Siyasi seçimler", "Zaman içindeki değişimleri gösterme", "Parça bütün ilişkisi", "Kişi sayısı kıyası"], answer: 1 }
+                    ]
+                },
+                din: {
+                    5: [
+                        { q: "İslam'ın şartı kaçtır?", options: ["4", "5", "6", "7"], answer: 1 },
+                        { q: "Allah'ın her şeyi bilmesi sıfatına ne denir?", options: ["İlim", "Kudret", "Basar", "Tekvin"], answer: 0 },
+                        { q: "Kur'an-ı Kerim'in ilk suresi hangisidir?", options: ["Bakara", "Fatiha", "Yasin", "Ihlas"], answer: 1 },
+                        { q: "Hz. Muhammed (s.a.v) nerede doğmuştur?", options: ["Medine", "Mekke", "Kudüs", "Taif"], answer: 1 },
+                        { q: "Ramazan ayında tutulan oruç hangi ibadettir?", options: ["Farz", "Vacip", "Sünnet", "Müstahap"], answer: 0 },
+                        { q: "Kutsal kitabımız Kur'an-ı Kerim hangi ayda indirilmeye başlanmıştır?", options: ["Şaban", "Ramazan", "Recep", "Muharrem"], answer: 1 },
+                        { q: "Subhaneke duası ne zaman okunur?", options: ["Namazda ilk rekatta başlarken", "Yemekten sonra", "Uyumadan önce", "Yolculukta"], answer: 0 },
+                        { q: "Allah'ın bir ve tek olduğuna inanmaya ne denir?", options: ["Tevhid", "Şirk", "Nifak", "Gıybet"], answer: 0 },
+                        { q: "Peygamberimize gelen ilk vahiy emri nedir?", options: ["Oku!", "Kalk!", "Yaz!", "Dinle!"], answer: 0 },
+                        { q: "Ezanda 'Hayya ala's-salah' ne demektir?", options: ["Haydi namaza", "Haydi kurtuluşa", "Allah en büyüktür", "Namaz uykudan hayırlıdır"], answer: 0 }
+                    ],
+                    6: [
+                        { q: "İmanın şartı kaçtır?", options: ["5", "6", "7", "4"], answer: 1 },
+                        { q: "Peygamberlere gelen ilahi kitaplardan İncil hangi peygambere indirilmiştir?", options: ["Hz. Musa", "Hz. İsa", "Hz. Davud", "Hz. Muhammed"], answer: 1 },
+                        { q: "Namazın kılınışında ayakta durmaya ne denir?", options: ["Rükû", "Kıyam", "Secde", "Kade-i ahire"], answer: 1 },
+                        { q: "Kötü davranışlardan olan 'gıybet' ne anlama gelir?", options: ["Yalan söylemek", "Birinin arkasından hoşlanmayacağı şekilde konuşmak", "Hırsızlık yapmak", "Kibirli olmak"], answer: 1 },
+                        { q: "Peygamberimizin Mekke'den Medine'ye hicreti hangi yılda gerçekleşmiştir?", options: ["571", "610", "622", "632"], answer: 2 },
+                        { q: "Zekat oranı malın kaçta kaçıdır?", options: ["1/10", "1/40", "1/5", "1/20"], answer: 1 },
+                        { q: "Kurban ibadeti hangi bayramda kesilir?", options: ["Ramazan Bayramı", "Kurban Bayramı", "Nevruz", "Kadir Gecesi"], answer: 1 },
+                        { q: "Hz. Musa'ya verilen kutsal kitap hangisidir?", options: ["Tevrat", "Zebur", "İncil", "Kur'an"], answer: 0 },
+                        { q: "Namazda eğilerek elleri dize koymaya ne denir?", options: ["Kıyam", "Rükû", "Secde", "Tekbir"], answer: 1 },
+                        { q: "Peygamberimizin güvenilir olmasından dolayı verilen unvan nedir?", options: ["El-Emin", "El-Halil", "El-Alim", "El-Fatih"], answer: 0 }
+                    ],
+                    7: [
+                        { q: "Meleklerden hangisi vahiy getirmekle görevlidir?", options: ["Cebrail", "Mikail", "İsrail", "Azrail"], answer: 0 },
+                        { q: "Ahiret hayatında insanların toplanacağı büyük alana ne denir?", options: ["Berzah", "Mahşer", "Mizan", "Sırat"], answer: 1 },
+                        { q: "Hac ibadeti sırasında Kabe'nin etrafında bir kez dönmeye ne denir?", options: ["Şavt", "Tavaf", "Sa'y", "Vakfe"], answer: 0 },
+                        { q: "Hz. Muhammed'in sözleri ve davranışlarına verilen genel isim nedir?", options: ["Sünnet", "Ayet", "Farz", "Mubah"], answer: 0 },
+                        { q: "Kıyamet gününde amellerin tartıldığı manevi teraziye ne denir?", options: ["Mizan", "Berzah", "Sırat", "Haşr"], answer: 0 },
+                        { q: "Safa ile Merve tepeleri arasında gidip gelmeye ne denir?", options: ["Vakfe", "Sa'y", "Tavaf", "İhram"], answer: 1 },
+                        { q: "Hacca girenlerin giydiği dikişsiz beyaz örtüye ne denir?", options: ["İhram", "Kabe", "Mina", "Arafat"], answer: 0 },
+                        { q: "Öldükten sonra yeniden dirilmeye ne denir?", options: ["Ba's", "Haşr", "Ecel", "Kıyamet"], answer: 0 },
+                        { q: "Dostluk ve kardeşlik pekiştiren, gösterişten uzak yapılan maddi yardım hangisidir?", options: ["Sadaka", "Riba", "İsraf", "Kibir"], answer: 0 },
+                        { q: "İslam düşüncesindeki yorum farklılıklarına verilen ad nedir?", options: ["Mezhep", "Hadis", "Siyer", "Kelam"], answer: 0 }
+                    ]
+                },
+                sosyal: {
+                    5: [
+                        { q: "Somut tarihi eserlere hangisi örnektir?", options: ["Masal", "Eski Madeni Paralar", "Efsane", "Türkü"], answer: 1 },
+                        { q: "Ülkemizin başkenti neresidir?", options: ["İstanbul", "Ankara", "İzmir", "Bursa"], answer: 1 },
+                        { q: "Dünyanın şekli nasıldır?", options: ["Tam yuvarlak", "Geoid (Kutuplardan basık)", "Kare", "Düz"], answer: 1 },
+                        { q: "Yeryüzü şekillerini ve yükseltileri gösteren harita hangisidir?", options: ["Fiziki Harita", "Siyasi Harita", "İklim Haritası", "Nüfus Haritası"], answer: 0 },
+                        { q: "Tüketici haklarını korumak için alınan fiş/fatura ne işe yarar?", options: ["Alışverişi belgelemeye", "Garanti vermemeye", "Vergi vermemeye", "Fiyatı düşürmeye"], answer: 0 },
+                        { q: "Çevremizdeki ağaçlandırma çalışması hangi felaketi önlemeye yardımcı olur?", options: ["Erozyon", "Deprem", "Fırtına", "Tsunami"], answer: 0 },
+                        { q: "Karadeniz ikliminin en belirgin özelliği nedir?", options: ["Her mevsim yağışlı", "Yazları çok sıcak ve kurak", "Sadece kar yağışlı", "Rüzgarsız"], answer: 0 },
+                        { q: "Üretim yapıp satan kişiye ne denir?", options: ["Tüketici", "Üretici", "Müşteri", "Öğrenci"], answer: 1 },
+                        { q: "Çocuk hakları sözleşmesine göre her insan kaç yaşına kadar çocuk sayılır?", options: ["15", "18", "21", "12"], answer: 1 },
+                        { q: "Hangisi temel ihtiyaçlarımızdan biridir?", options: ["Beslenme", "Oyun konsolu", "Marka ayakkabı", "Tatil yapmak"], answer: 0 }
+                    ],
+                    6: [
+                        { q: "Tarihte bilinen ilk Türk devleti hangisidir?", options: ["Göktürkler", "Asya Hun Devleti", "Uygurlar", "Karahanlılar"], answer: 1 },
+                        { q: "İpek Yolu hangi ülkeden başlayıp Avrupa'ya kadar uzanır?", options: ["Çin", "Hindistan", "Mısır", "İran"], answer: 0 },
+                        { q: "Türkiye hangi kıtaların kesişim noktasındadır?", options: ["Asya ve Avrupa", "Afrika ve Amerika", "Avrupa ve Avustralya", "Asya ve Amerika"], answer: 0 },
+                        { q: "Tarıma ve hayvancılığa elverişli, sanayinin geliştiği yerlerde nüfus nasıldır?", options: ["Seyrek", "Yoğun", "Yoktur", "Sadece yaşlıdır"], answer: 1 },
+                        { q: "Demokrasinin temel ilkelerinden olan 'Milli Egemenlik' ne anlama gelir?", options: ["Yönetim yetkisinin millete ait olması", "Tek kişinin yönetimi", "Askeri yönetim", "Kralın kararları"], answer: 0 },
+                        { q: "Yerleşik hayata geçen ilk Türk devleti hangisidir?", options: ["Uygurlar", "Hunlar", "Avarlar", "Hazarlar"], answer: 0 },
+                        { q: "Paralellerin toplam sayısı kaçtır?", options: ["180", "360", "90", "100"], answer: 0 },
+                        { q: "Madencilik en çok hangi bölgemizde gelişmiştir?", options: ["Doğu Anadolu", "Marmara", "Ege", "İç Anadolu"], answer: 0 },
+                        { q: "Orhun Kitabeleri hangi devlete aittir?", options: ["II. Göktürk (Kutluk)", "Asya Hun", "Uygur", "Osmanlı"], answer: 0 },
+                        { q: "İslamiyet'i kabul eden ilk Türk devleti hangisidir?", options: ["Karahanlılar", "Göktürkler", "Selçuklular", "Gökdağ"], answer: 0 }
+                    ],
+                    7: [
+                        { q: "Osmanlı Devleti'nin kurucusu kimdir?", options: ["Ertuğrul Gazi", "Osman Bey", "Orhan Bey", "Fatih Sultan Mehmet"], answer: 1 },
+                        { q: "İstanbul'u fethederek Çağ kapatıp Çağ açan Osmanlı padişahı kimdir?", options: ["II. Mehmed (Fatih)", "Yavuz Sultan Selim", "Kanuni Sultan Süleyman", "I. Murat"], answer: 0 },
+                        { q: "Matbaayı icat ederek bilginin hızlı yayılmasını sağlayan bilim insanı kimdir?", options: ["Gutenberg", "Galileo", "Newton", "Copernicus"], answer: 0 },
+                        { q: "Sanayi İnkılabı ilk olarak hangi ülkede başlamıştır?", options: ["Fransa", "İngiltere", "Almanya", "İtalya"], answer: 1 },
+                        { q: "Nüfus sayımlarında hangisi tespit edilemez?", options: ["Okuma yazma oranı", "Kişilerin gelecekteki rüyaları", "Yaş grubu dağılımı", "Kır-kent nüfusu"], answer: 1 },
+                        { q: "Kitle iletişim araçlarında yayınların kısıtlanmasına ne ad verilir?", options: ["Sansür", "Tekzip", "Kamuoyu", "Telif"], answer: 0 },
+                        { q: "Osmanlı'da devşirme sistemiyle yetiştirilen saray askerlerine ne denirdi?", options: ["Tımarlı Sipahi", "Yeniçeri", "Laza", "Azepler"], answer: 1 },
+                        { q: "Coğrafi Keşifler sonucunda hangi ticaret yolu önemini kaybetti?", options: ["İpek ve Baharat Yolu", "Süveyş Kanalı", "Panama Kanalı", "Demiryolları"], answer: 0 },
+                        { q: "Lale Devri hangi padişah döneminde yaşanmıştır?", options: ["III. Ahmet", "I. Mahmut", "II. Abdülhamid", "Genç Osman"], answer: 0 },
+                        { q: "Anayasamızın ilk 3 maddesi değiştirilebilir mi?", options: ["Evet", "Değiştirilemez ve teklif dahi edilemez", "Meclis kararıyla", "Halk oylamasıyla"], answer: 1 }
+                    ]
+                }
+            };
+
+            const questions = subjectMap[subjectId]?.[grade] || subjectMap['fen'][5];
+            return {
+                title: `${grade}. Sınıf ${getSubjectName(subjectId)} - Test ${testNum}`,
+                questions: questions
+            };
+        }
+
+        function getSubjectName(id) {
+            const found = subjectsData.find(s => s.id === id);
+            return found ? found.name : 'Ders';
+        }
+
+        /* ==================== SCHEDULE DATA ==================== */
+        const scheduleData = {
+            5: [
+                { day: "Pazartesi", tasks: ["Fen Bilimleri: 1 Test Çöz", "Matematik: 20 Soru"] },
+                { day: "Salı", tasks: ["Sosyal Bilgiler: Konu Tekrarı", "Din Kültürü: 1 Test"] },
+                { day: "Çarşamba", tasks: ["Matematik: Problem Çözümü", "Fen: Deney Videosu"] },
+                { day: "Perşembe", tasks: ["Din Kültürü: Kavram Tekrarı", "Sosyal: Harita Çalışması"] },
+                { day: "Cuma", tasks: ["Genel Tekrar Testi", "Tiger AI İle Soru Cevap"] }
+            ],
+            6: [
+                { day: "Pazartesi", tasks: ["Matematik: Cebirsel İfadeler", "Fen: Vücudumuzdaki Sistemler"] },
+                { day: "Salı", tasks: ["Sosyal: İpek Yolu & Tarih", "Din: Peygamberler Tarihi"] },
+                { day: "Çarşamba", tasks: ["Fen Bilimleri: Yoğunluk Deneyi", "Matematik: Kesirler"] },
+                { day: "Perşembe", tasks: ["Din: Namaz İbadeti", "Sosyal: Coğrafi Konum"] },
+                { day: "Cuma", tasks: ["Haftalık Karma Test (20 Soru)", "Tiger Bilgi Yarışması"] }
+            ],
+            7: [
+                { day: "Pazartesi", tasks: ["Fen: Hücre ve Bölünmeler", "Matematik: Tam Sayılar"] },
+                { day: "Salı", tasks: ["Sosyal: Osmanlı Kuruluş", "Din: Melek ve Ahiret"] },
+                { day: "Çarşamba", tasks: ["Matematik: Denklemler", "Fen: Aynalar ve Işık"] },
+                { day: "Perşembe", tasks: ["Sosyal: İletişim ve Medya", "Din: Hac ve Kurban"] },
+                { day: "Cuma", tasks: ["LGS Ön Hazırlık Denemesi", "Yapay Zeka Koçu İle Analiz"] }
+            ]
+        };
+
+        /* ==================== TRIVIA QUESTIONS ==================== */
+        const triviaQuestions = [
+            { q: "Güneş sistemindeki en sıcak gezegen hangisidir?", options: ["Merkür", "Venüs", "Mars", "Jüpiter"], answer: 1 },
+            { q: "Tarihte Türk adıyla kurulan ilk devlet hangisidir?", options: ["Göktürkler", "Hunlar", "Uygurlar", "Selçuklular"], answer: 0 },
+            { q: "En küçük asal sayı kaçtır?", options: ["0", "1", "2", "3"], answer: 2 },
+            { q: "Kur'an-ı Kerim'in ilk suresi hangisidir?", options: ["Fatiha", "Bakara", "Yasin", "İhlas"], answer: 0 },
+            { q: "Suyun donma noktası kaç santigrat derecedir?", options: ["-10", "0", "100", "10"], answer: 1 }
+        ];
+
+        /* ==================== INITIALIZATION & ROUTING ==================== */
+        window.onload = function() {
+            renderSubjectCards();
+            renderSchedule(5);
+            updateUIByLang();
+        };
+
+        function navigateTo(section) {
+            // Hide all sections
+            ['home', 'test', 'result', 'schedule', 'quiz', 'ai'].forEach(sec => {
+                const el = document.getElementById(`sec-${sec}`);
+                if(el) el.classList.add('hidden');
+            });
+
+            // Show selected
+            const target = document.getElementById(`sec-${section}`);
+            if(target) target.classList.remove('hidden');
+
+            // Reset active nav button state
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-indigo-600', 'dark:text-indigo-400', 'bg-indigo-50', 'dark:bg-slate-700');
+                btn.classList.add('text-slate-600', 'dark:text-slate-300');
+            });
+
+            const activeNav = document.getElementById(`nav${section.charAt(0).toUpperCase() + section.slice(1)}`);
+            if(activeNav) {
+                activeNav.classList.add('text-indigo-600', 'dark:text-indigo-400', 'bg-indigo-50', 'dark:bg-slate-700');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function selectGrade(gradeNum) {
+            currentState.currentGrade = gradeNum;
+            // Update grade buttons visually
+            [5, 6, 7].forEach(g => {
+                const btn = document.getElementById(`btn-grade-${g}`);
+                if(btn) {
+                    if(g === gradeNum) {
+                        btn.classList.add('border-indigo-600', 'ring-2', 'ring-indigo-500/20');
+                    } else {
+                        btn.classList.remove('border-indigo-600', 'ring-2', 'ring-indigo-500/20');
+                    }
+                }
+            });
+
+            document.getElementById('selectedGradeTitle').innerText = `${gradeNum}. Sınıf Dersleri`;
+            renderSubjectCards();
+            renderSchedule(gradeNum);
+        }
+
+        function renderSubjectCards() {
+            const container = document.getElementById('subjectCardsContainer');
+            container.innerHTML = '';
+
+            subjectsData.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4";
+                card.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-${sub.color}-100 dark:bg-${sub.color}-900/40 text-${sub.color}-600 dark:text-${sub.color}-300 flex items-center justify-center text-xl">
+                            <i class="fa-solid ${sub.icon}"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">${sub.name}</h3>
+                            <p class="text-xs text-slate-400">${currentState.currentGrade}. Sınıf Müfredatı</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 pt-2">
+                        <button onclick="startTest('${sub.id}', 1)" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 text-left transition bg-slate-50 dark:bg-slate-700/50 group">
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-1">TEST 1</span>
+                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600">10 Soru • 15 Dk</span>
+                        </button>
+                        <button onclick="startTest('${sub.id}', 2)" class="p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-indigo-500 text-left transition bg-slate-50 dark:bg-slate-700/50 group">
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 block mb-1">TEST 2</span>
+                            <span class="text-xs font-semibold text-slate-700 dark:text-slate-200 group-hover:text-indigo-600">10 Soru • 15 Dk</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        /* ==================== TEST RUNNER LOGIC ==================== */
+        function startTest(subjectId, testNum) {
+            const data = getTestData(currentState.currentGrade, subjectId, testNum);
+            currentState.currentTest = data;
+            currentState.currentQuestionIdx = 0;
+            currentState.userAnswers = new Array(data.questions.length).fill(null);
+            currentState.timeLeft = 900; // 15 mins
+            currentState.jokerUsed = false;
+
+            document.getElementById('testSubjectBadge').innerText = getSubjectName(subjectId).toUpperCase();
+            document.getElementById('testTitleText').innerText = data.title;
+            
+            document.getElementById('jokerFiftyBtn').disabled = false;
+            document.getElementById('jokerFiftyBtn').classList.remove('opacity-40', 'cursor-not-allowed');
+
+            navigateTo('test');
+            loadQuestion();
+            startTimer();
+        }
+
+        function loadQuestion() {
+            const qData = currentState.currentTest.questions[currentState.currentQuestionIdx];
+            const totalQ = currentState.currentTest.questions.length;
+
+            document.getElementById('questionNumText').innerText = `Soru ${currentState.currentQuestionIdx + 1} / ${totalQ}`;
+            document.getElementById('questionText').innerText = qData.q;
+            
+            // Progress Bar
+            const percent = ((currentState.currentQuestionIdx + 1) / totalQ) * 100;
+            document.getElementById('quizProgressBar').style.width = `${percent}%`;
+
+            // Options
+            const container = document.getElementById('optionsContainer');
+            container.innerHTML = '';
+
+            const selectedAns = currentState.userAnswers[currentState.currentQuestionIdx];
+
+            qData.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `opt-btn-${idx}`;
+                btn.onclick = () => selectOption(idx);
+                
+                let btnStyle = "w-full text-left p-4 rounded-xl border-2 transition font-semibold text-sm flex items-center justify-between ";
+                if(selectedAns === idx) {
+                    btnStyle += "border-indigo-600 bg-indigo-50 dark:bg-slate-700 text-indigo-700 dark:text-indigo-300";
+                } else {
+                    btnStyle += "border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800";
+                }
+
+                btn.className = btnStyle;
+                btn.innerHTML = `
+                    <span>${String.fromCharCode(65 + idx)}) ${optText}</span>
+                    <i class="${selectedAns === idx ? 'fa-solid fa-circle-check text-indigo-600' : 'fa-regular fa-circle text-slate-300'} text-lg"></i>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Enable / Disable Next Button
+            document.getElementById('nextQuestionBtn').disabled = selectedAns === null;
+            if(currentState.currentQuestionIdx === totalQ - 1) {
+                document.getElementById('nextQuestionBtn').innerHTML = 'Testi Bitir <i class="fa-solid fa-check ml-1"></i>';
+            } else {
+                document.getElementById('nextQuestionBtn').innerHTML = 'Sonraki Soru <i class="fa-solid fa-chevron-right ml-1"></i>';
+            }
+        }
+
+        function selectOption(optIdx) {
+            currentState.userAnswers[currentState.currentQuestionIdx] = optIdx;
+            loadQuestion();
+        }
+
+        function nextQuestion() {
+            if(currentState.currentQuestionIdx < currentState.currentTest.questions.length - 1) {
+                currentState.currentQuestionIdx++;
+                loadQuestion();
+            } else {
+                finishTest();
+            }
+        }
+
+        function useJokerFifty() {
+            if(currentState.jokerUsed) return;
+            currentState.jokerUsed = true;
+
+            const qData = currentState.currentTest.questions[currentState.currentQuestionIdx];
+            const correctIdx = qData.answer;
+
+            // Find wrong options
+            let wrongIndices = [];
+            qData.options.forEach((_, idx) => {
+                if(idx !== correctIdx) wrongIndices.push(idx);
+            });
+
+            // Randomly pick 2 wrong indices to disable
+            wrongIndices.sort(() => Math.random() - 0.5);
+            const toDisable = wrongIndices.slice(0, 2);
+
+            toDisable.forEach(idx => {
+                const btn = document.getElementById(`opt-btn-${idx}`);
+                if(btn) {
+                    btn.disabled = true;
+                    btn.classList.add('opacity-30', 'line-through', 'cursor-not-allowed');
+                }
+            });
+
+            // Disable joker button after use
+            const jokerBtn = document.getElementById('jokerFiftyBtn');
+            jokerBtn.disabled = true;
+            jokerBtn.classList.add('opacity-40', 'cursor-not-allowed');
+        }
+
+        function startTimer() {
+            clearInterval(currentState.timerInterval);
+            currentState.timerInterval = setInterval(() => {
+                currentState.timeLeft--;
+                const mins = Math.floor(currentState.timeLeft / 60);
+                const secs = currentState.timeLeft % 60;
+                document.getElementById('timerDisplay').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+                if(currentState.timeLeft <= 0) {
+                    clearInterval(currentState.timerInterval);
+                    finishTest();
+                }
+            }, 1000);
+        }
+
+        function confirmExitTest() {
+            if(confirm("Testten çıkmak istediğinize emin misiniz? İlerlemeniz kaydedilmeyecektir.")) {
+                clearInterval(currentState.timerInterval);
+                navigateTo('home');
+            }
+        }
+
+        function finishTest() {
+            clearInterval(currentState.timerInterval);
+
+            // Calculate score
+            let correctCount = 0;
+            let wrongCount = 0;
+            const total = currentState.currentTest.questions.length;
+
+            currentState.currentTest.questions.forEach((q, idx) => {
+                const userAns = currentState.userAnswers[idx];
+                if(userAns === q.answer) {
+                    correctCount++;
+                } else if(userAns !== null) {
+                    wrongCount++;
+                }
+            });
+
+            const scorePercent = Math.round((correctCount / total) * 100);
+
+            document.getElementById('resCorrect').innerText = correctCount;
+            document.getElementById('resWrong').innerText = wrongCount;
+            document.getElementById('resScore').innerText = `%${scorePercent}`;
+            document.getElementById('resultSubtitle').innerText = `${currentState.currentTest.title}`;
+
+            // Generate Smart Feedback
+            let feedback = "";
+            if(scorePercent >= 80) {
+                feedback = "🌟 Harika bir başarı! Konuya oldukça hakimsin. Eksiksiz ilerliyorsun, böyle devam et ve yeni testlere meydan oku!";
+            } else if(scorePercent >= 50) {
+                feedback = "👍 Güzel bir performans! Konunun temellerini kavramışsın ama birkaç dikkatsizlik var. Yanlış yaptığın soruları tekrar gözden geçirmeni ve Tiger AI'ya sormanı öneririz.";
+            } else {
+                feedback = "💪 Bu konuda biraz daha çalışmaya ihtiyacın var. Pes etmek yok! Ders programındaki konu özetini inceleyip Yapay Zeka Öğretmenimizden yardım alarak tekrar test çözebilirsin.";
+            }
+
+            document.getElementById('resultFeedbackText').innerText = feedback;
+            navigateTo('result');
+        }
+
+        /* ==================== SCHEDULE LOGIC ==================== */
+        function renderSchedule(grade) {
+            const container = document.getElementById('scheduleDaysContainer');
+            container.innerHTML = '';
+
+            // Update grade filter buttons state
+            [5, 6, 7].forEach(g => {
+                const btn = document.getElementById(`schBtn${g}`);
+                if(btn) {
+                    if(g === grade) {
+                        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 shadow-sm text-indigo-600 dark:text-indigo-400";
+                    } else {
+                        btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200";
+                    }
+                }
+            });
+
+            const days = scheduleData[grade] || scheduleData[5];
+            days.forEach(item => {
+                const col = document.createElement('div');
+                col.className = "bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-3";
+                col.innerHTML = `
+                    <div class="flex items-center space-x-2 border-b border-slate-100 dark:border-slate-700 pb-2">
+                        <i class="fa-solid fa-calendar-day text-indigo-500 text-sm"></i>
+                        <h4 class="font-bold text-sm">${item.day}</h4>
+                    </div>
+                    <ul class="space-y-2">
+                        ${item.tasks.map(t => `<li class="text-xs text-slate-600 dark:text-slate-300 flex items-start gap-1.5"><i class="fa-solid fa-check text-emerald-500 text-[10px] mt-0.5"></i> <span>${t}</span></li>`).join('')}
+                    </ul>
+                `;
+                container.appendChild(col);
+            });
+        }
+
+        function filterScheduleGrade(grade) {
+            renderSchedule(grade);
+        }
+
+        /* ==================== TRIVIA GAME LOGIC ==================== */
+        function startTriviaGame() {
+            currentState.triviaScore = 0;
+            currentState.triviaIdx = 0;
+            document.getElementById('triviaStartArea').classList.add('hidden');
+            document.getElementById('triviaGameArea').classList.remove('hidden');
+            loadTriviaQuestion();
+        }
+
+        function loadTriviaQuestion() {
+            if(currentState.triviaIdx >= triviaQuestions.length) {
+                alert(`Yarışma Bitti! Toplam Puanınız: ${currentState.triviaScore}`);
+                document.getElementById('triviaStartArea').classList.remove('hidden');
+                document.getElementById('triviaGameArea').classList.add('hidden');
+                return;
+            }
+
+            const q = triviaQuestions[currentState.triviaIdx];
+            document.getElementById('triviaQuestionText').innerText = q.q;
+            document.getElementById('triviaScoreText').innerText = `Puan: ${currentState.triviaScore}`;
+
+            const container = document.getElementById('triviaOptionsContainer');
+            container.innerHTML = '';
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/50 hover:bg-indigo-50 dark:hover:bg-slate-600 text-sm font-semibold text-left transition";
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(idx === q.answer) {
+                        currentState.triviaScore += 20;
+                    }
+                    currentState.triviaIdx++;
+                    loadTriviaQuestion();
+                };
+                container.appendChild(btn);
+            });
+
+            // Timer
+            clearInterval(currentState.triviaInterval);
+            currentState.triviaTimer = 15;
+            document.getElementById('triviaTimerText').innerText = `Kalan Süre: ${currentState.triviaTimer}s`;
+
+            currentState.triviaInterval = setInterval(() => {
+                currentState.triviaTimer--;
+                document.getElementById('triviaTimerText').innerText = `Kalan Süre: ${currentState.triviaTimer}s`;
+                if(currentState.triviaTimer <= 0) {
+                    clearInterval(currentState.triviaInterval);
+                    currentState.triviaIdx++;
+                    loadTriviaQuestion();
+                }
+            }, 1000);
+        }
+
+        /* ==================== GEMINI AI INTEGRATION ==================== */
+        async function handleAISubmit(e) {
+            e.preventDefault();
+            const inputEl = document.getElementById('aiInput');
+            const userMsg = inputEl.value.trim();
+            if(!userMsg) return;
+
+            appendChatMessage('user', userMsg);
+            inputEl.value = '';
+
+            // Loading indicator
+            const loadingId = appendChatMessage('ai', 'Düşünüyorum... 🧠');
+
+            try {
+                const apiKey = ""; // Canvas runtime provides standard key
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const systemInstruction = "Sen Tiger Eğitim Platformu'nun yapay zeka ders öğretmenisin. 5, 6 ve 7. sınıf öğrencilerine Fen, Matematik, Din Kültürü ve Sosyal Bilgiler derslerinde anlaşılır, samimi, cesaretlendirici ve eğitici açıklamalar yaparsın. Yanıtların kısa, öz ve öğrenci dostu olsun.";
+
+                const payload = {
+                    contents: [{ parts: [{ text: userMsg }] }],
+                    systemInstruction: { parts: [{ text: systemInstruction }] }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const aiText = result.candidates?.[0]?.content?.parts?.[0]?.text || "Üzgünüm, şu an yanıt oluşturamadım. Lütfen tekrar dene.";
+
+                // Remove loading msg and append actual answer
+                const loadingEl = document.getElementById(loadingId);
+                if(loadingEl) loadingEl.remove();
+
+                appendChatMessage('ai', aiText);
+
+            } catch (error) {
+                const loadingEl = document.getElementById(loadingId);
+                if(loadingEl) loadingEl.remove();
+                appendChatMessage('ai', "Bağlantıda bir sorun oluştu, lütfen tekrar deneyin.");
+            }
+        }
+
+        function appendChatMessage(role, text) {
+            const body = document.getElementById('aiChatBody');
+            const msgId = 'msg-' + Date.now();
+            const wrapper = document.createElement('div');
+            wrapper.id = msgId;
+
+            if(role === 'user') {
+                wrapper.className = "flex items-start justify-end space-x-3";
+                wrapper.innerHTML = `
+                    <div class="bg-gradient-brand text-white rounded-2xl p-4 text-sm max-w-md shadow-sm">
+                        ${text}
+                    </div>
+                `;
+            } else {
+                wrapper.className = "flex items-start space-x-3";
+                wrapper.innerHTML = `
+                    <div class="w-8 h-8 rounded-xl bg-gradient-brand flex items-center justify-center text-white text-xs shrink-0">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-2xl p-4 text-sm max-w-md shadow-sm leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            body.appendChild(wrapper);
+            body.scrollTop = body.scrollHeight;
+            return msgId;
+        }
+
+        function askAIAboutTest() {
+            navigateTo('ai');
+            const prompt = `${currentState.currentTest.title} testini tamamladım. Bu ders ve sınıf seviyesine özel bana nasıl çalışmam gerektiğine dair tüyolar verir misin?`;
+            document.getElementById('aiInput').value = prompt;
+        }
+
+        /* ==================== SETTINGS & THEME LOGIC ==================== */
+        function openSettingsModal() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        function setTheme(mode) {
+            currentState.theme = mode;
+            if(mode === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeDarkBtn').className = "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition text-indigo-600 dark:text-indigo-300";
+                document.getElementById('themeLightBtn').className = "p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition";
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('themeLightBtn').className = "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition text-indigo-600 dark:text-indigo-300";
+                document.getElementById('themeDarkBtn').className = "p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition";
+            }
+        }
+
+        function setLanguage(lang) {
+            currentState.currentLanguage = lang;
+            updateUIByLang();
+
+            if(lang === 'tr') {
+                document.getElementById('langTrBtn').className = "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition text-indigo-600 dark:text-indigo-300";
+                document.getElementById('langEnBtn').className = "p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition";
+            } else {
+                document.getElementById('langEnBtn').className = "p-3 rounded-xl border-2 border-indigo-500 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition text-indigo-600 dark:text-indigo-300";
+                document.getElementById('langTrBtn').className = "p-3 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center justify-center space-x-2 text-sm font-bold transition";
+            }
+        }
+
+        function updateUIByLang() {
+            const langDict = i18n[currentState.currentLanguage] || i18n.tr;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if(langDict[key]) {
+                    el.innerText = langDict[key];
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
